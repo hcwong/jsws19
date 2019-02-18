@@ -2,9 +2,10 @@
 
 // global variables
 let startTime = 0;
-let lapTime = 0;
+let pauseTime = 0;
 let timer = 0;
 const clockElement = document.querySelector('.clock');
+const listElement = document.querySelector('#lap-timings');
 
 
 function formatTime(time) {
@@ -26,7 +27,7 @@ function formatTime(time) {
 
 function pad(value, size) {
   // Implement for/while loops here!
-  let resultStr = String(value);
+  let resultStr = String(value); // convert Number to String
   let counter = size - resultStr.length;
   while (counter > 0) {
     counter -= 1;
@@ -41,10 +42,21 @@ function start() {
   startTime = startTime ? startTime : getTimeNow();
 }
 
+function lap() {
+  // prevent lap from being run if its stopped or 0
+  if (!startTime) {
+    return;
+  }
+  const lapTime = formatTime(stopwatchTime());
+  addListEntry(lapTime);
+  startTime = getTimeNow();
+  pauseTime = 0;
+}
+
 function stop() {
   // Writing in if else conditional here
   if (startTime) {
-    lapTime = lapTime + getTimeNow() - startTime;
+    pauseTime = pauseTime + getTimeNow() - startTime;
   }
   // remember to clear the interval we set
   clearInterval(timer);
@@ -58,19 +70,30 @@ function update() {
 function reset() {
   // if running, don't do anything
   if (!startTime) {
-    startTime = lapTime = 0;
+    startTime = pauseTime = 0;
     update();
+  }
+  // remove all lap times
+  while (listElement.firstChild) {
+    listElement.removeChild(listElement.firstChild);
   }
 }
 
 function stopwatchTime() {
   if (startTime) {
-    return lapTime + getTimeNow() - startTime;
+    return pauseTime + getTimeNow() - startTime;
   } else {
-    return lapTime;
+    return pauseTime;
   }
 }
 
 function getTimeNow() {
   return Date.now();
 }
+
+// ES6 Arrow functions
+const addListEntry = (lapTime) => {
+  const listEntry = document.createElement('li');
+  listEntry.innerHTML = lapTime;
+  listElement.appendChild(listEntry);
+};

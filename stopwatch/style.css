@@ -43,6 +43,7 @@ html, body {
   flex-direction: row;
   justify-content: center;
   width: 100%;
+  margin-bottom: 20px;
 }
 
 .stopwatch-btn {
@@ -63,4 +64,15 @@ html, body {
 
 .blue {
   background: lightblue;
+}
+
+.white {
+  background: white;
+}
+
+#lap-timings {
+  margin: 0px;
+  padding: 0px 25px;
+  overflow: scroll;
+  height: 20%;
 }
